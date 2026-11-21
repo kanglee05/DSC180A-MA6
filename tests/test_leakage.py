@@ -71,3 +71,10 @@ def test_three_day_median_excludes_today(feats):
     # would replace 1263 with 1421 and incorrectly give 1406.
     day = pd.Timestamp("2011-01-14")
     assert feats.set_index("dteday").at[day, "cnt_median_3"] == 1263
+
+
+def test_unknown_weather_label_raises():
+    from src.features import encode_weather
+
+    with pytest.raises(ValueError, match="UNSEEN_WEATHER"):
+        encode_weather(pd.Series(["GOOD", "UNSEEN_WEATHER"]))
