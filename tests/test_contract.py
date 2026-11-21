@@ -56,3 +56,11 @@ def test_persistence_baseline_is_reported():
     """The baseline that matters for a lag-driven model is 'yesterday again'.
     It must be in the comparison, whatever its score."""
     assert "baseline_persistence" in MODELS
+
+
+def test_all_raw_columns_are_classified(raw):
+    from src.config import FORBIDDEN, RAW_INPUT_COLS
+
+    classified = FORBIDDEN | RAW_INPUT_COLS | {"dteday"}
+    unexpected = set(raw.columns) - classified
+    assert not unexpected, f"Unclassified raw columns: {sorted(unexpected)}"

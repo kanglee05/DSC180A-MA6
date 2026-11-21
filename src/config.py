@@ -53,3 +53,9 @@ VALID_END = "2012-06-30"
 # have no complete history and are dropped; tests/test_contract.py uses this
 # to bound how many rows may legitimately disappear.
 LAG_WARMUP = 7
+
+# Raw weather and calendar inputs reviewed for this version of the dataset.
+RAW_INPUT_COLS = {
+    "season", "mnth", "holiday", "weekday", "workday", "weather",
+    "temp", "atemp", "hum", "windspeed",
+}
