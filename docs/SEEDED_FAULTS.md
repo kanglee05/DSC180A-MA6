@@ -329,3 +329,10 @@ FAILED tests/test_leakage.py::test_rolling_mean_excludes_today - assert np.fl...
 1 failed, 7 passed in 0.87s
 Hook exit code: 2
 ```
+
+Repair: restored shift(1) using a Codex-provided Terminal script. The repair was verified locally.
+
+```
+.                                                                        [100%]
+1 passed in 0.73s
+```
