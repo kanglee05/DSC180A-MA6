@@ -245,3 +245,5 @@ FAILED tests/test_leakage.py::test_no_forbidden_features - AssertionError: fo...
 1 failed, 7 passed in 0.82s
 Hook exit code: 2
 ```
+
+Repair took one agent turn. Claude removed the exception for `casual`, and I reran `test_no_forbidden_features` in Terminal: 1 passed.
