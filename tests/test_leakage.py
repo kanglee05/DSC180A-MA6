@@ -64,3 +64,10 @@ def test_no_missing_values(feats):
 def test_dates_are_sorted_and_unique(feats):
     assert feats.dteday.is_monotonic_increasing
     assert feats.dteday.is_unique
+
+
+def test_three_day_median_excludes_today(feats):
+    # Jan 11–13 had 1263, 1162, and 1406 rides. Including Jan 14
+    # would replace 1263 with 1421 and incorrectly give 1406.
+    day = pd.Timestamp("2011-01-14")
+    assert feats.set_index("dteday").at[day, "cnt_median_3"] == 1263
