@@ -336,3 +336,75 @@ Repair: restored shift(1) using a Codex-provided Terminal script. The repair was
 .                                                                        [100%]
 1 passed in 0.73s
 ```
+
+## Fault 3 — unknown weather label silently accepted
+
+After the hosted API retry, I used a Codex-provided Terminal script to seed and repair this fault. The script replayed the hook manually. Automatic triggering was not verified. No interactive Claude repair turn occurred.
+
+### Exact edit
+
+```
+diff --git a/src/features.py b/src/features.py
+index 9a5fdda..8a5d196 100644
+--- a/src/features.py
++++ b/src/features.py
+@@ -24,10 +24,6 @@ def encode_weather(series: pd.Series) -> pd.Series:
+     days -- the most interesting days in the dataset -- disappear with no
+     error and no warning.
+     """
+-    known = series.dropna()
+-    unknown = set(known.unique()) - set(WEATHER_ORDER)
+-    if unknown:
+-        raise ValueError(f"unmapped weather labels: {sorted(unknown)}")
+     return series.map(WEATHER_ORDER).astype(float)
+```
+
+### Failing test
+
+```
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________________ test_unknown_weather_label_raises _______________________
+
+    def test_unknown_weather_label_raises():
+        from src.features import encode_weather
+    
+>       with pytest.raises(ValueError, match="UNSEEN_WEATHER"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_leakage.py:79: Failed
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_unknown_weather_label_raises - Failed: DID...
+1 failed in 0.77s
+```
+
+### Manual hook stderr
+
+```
+Leakage tests failed after editing src/features.py:
+........F                                                                [100%]
+=================================== FAILURES ===================================
+______________________ test_unknown_weather_label_raises _______________________
+
+    def test_unknown_weather_label_raises():
+        from src.features import encode_weather
+    
+>       with pytest.raises(ValueError, match="UNSEEN_WEATHER"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_leakage.py:79: Failed
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_unknown_weather_label_raises - Failed: DID...
+1 failed, 8 passed in 0.80s
+```
+
+### After repair
+
+```
+.                                                                        [100%]
+1 passed in 0.69s
+```
+
+Manual hook exit code: 2
