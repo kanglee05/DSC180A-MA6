@@ -408,3 +408,32 @@ FAILED tests/test_leakage.py::test_unknown_weather_label_raises - Failed: DID...
 ```
 
 Manual hook exit code: 2
+
+## Fault 4 — Bash copy into data/raw/
+
+### Actual shell output
+
+```text
+=== before: data/raw ===
+total 176
+drwxr-xr-x  3 kanglee  staff     96 Nov 21 16:06 .
+drwxr-xr-x  4 kanglee  staff    128 Nov 21 13:23 ..
+-rw-r--r--  1 kanglee  staff  86325 Nov 21 13:18 bike_daily.csv
+a6bed1577f6e4de56dcfae6d8315985073cc0ad3446c8c99ed60c86a0b5ad9dc  /Users/kanglee/Downloads/bikeshare-open/data/raw/bike_daily.csv
+
+=== mktemp created: /Users/kanglee/Downloads/bikeshare-open/data/raw/tmp.XXgL4R ===
+=== copied README.md into it ===
+-rw-------  1 kanglee  staff  3878 Nov 21 16:08 /Users/kanglee/Downloads/bikeshare-open/data/raw/tmp.XXgL4R
+compare: identical
+
+=== removed only that file ===
+
+=== after: data/raw ===
+total 176
+drwxr-xr-x  3 kanglee  staff     96 Nov 21 16:08 .
+drwxr-xr-x  4 kanglee  staff    128 Nov 21 13:23 ..
+-rw-r--r--  1 kanglee  staff  86325 Nov 21 13:18 bike_daily.csv
+a6bed1577f6e4de56dcfae6d8315985073cc0ad3446c8c99ed60c86a0b5ad9dc  /Users/kanglee/Downloads/bikeshare-open/data/raw/bike_daily.csv
+```
+
+No hook message appeared. The hook matches Edit and Write. A read-only mount for data/raw/ would prevent this Bash copy.
