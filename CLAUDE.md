@@ -39,3 +39,6 @@ rides) from calendar, weather, and lagged-demand features.
   cannot extrapolate to 2012. That is the headline result, not an error.
 - 2012-10-29 (Hurricane Sandy, 22 rides) is in the test set. Expect it in
   any residual plot.
+
+For cnt_median_3, use the three completed calendar days before the forecast date.
+Use /seed-fault for deliberate fault experiments and capture hook output before repair.
